@@ -1,5 +1,6 @@
 require_relative 'post'
 require_relative 'comment'
+require 'open-uri'
 require 'nokogiri'
 
 def scrape_post_data(nokogiri_doc)
@@ -27,7 +28,11 @@ def get_comment_content_list(nokogiri_doc)
   comment_content_list = []
   comment_nodeset = nokogiri_doc.search('.comment')
   comment_nodeset.each do |comment_node|
-    comment_content_list << comment_node.children[1].content
+    comment = ''
+    comment_node.children.each do |node_in_comment|
+      comment << node_in_comment.content
+    end
+    comment_content_list << comment
   end
   comment_content_list
 end
